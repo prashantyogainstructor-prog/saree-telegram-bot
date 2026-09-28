@@ -11,7 +11,6 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-3.8-flash" });
 
-
 app.get('/', (req, res) => {
   res.send('Gemini Node.js Bot Running!');
 });
@@ -23,12 +22,18 @@ app.post('/', async (req, res) => {
       const chatId = update.message.chat.id;
       const userText = update.message.text;
 
-      const prompt = `तुम 'शांति निकेतन साड़ी केंद्र' (Deendayal Nagar, behind Sai Mandir Road, Moradabad) के एक बहुत ही विनम्र और मददगार वर्चुअल असिस्टेंट हो। 
-      ग्राहक का सवाल: '${userText}'
-      कृपया ग्राहक को हिंदी में एक छोटा और स्पष्ट जवाब दो।`;
+      let replyText = "नमस्ते! शांति निकेतन साड़ी केंद्र में आपका स्वागत है। अभी सर्वर पर थोड़ा लोड है, कृपया 1 मिनट बाद पुनः प्रयास करें।";
 
-      const result = await model.generateContent(prompt);
-      const replyText = result.response.text();
+      try {
+        const prompt = `तुम 'शांति निकेतन साड़ी केंद्र' (Deendayal Nagar, behind Sai Mandir Road, Moradabad) के एक बहुत ही विनम्र और मददगार वर्चुअल असिस्टेंट हो। 
+        ग्राहक का सवाल: '${userText}'
+        कृपया ग्राहक को हिंदी में एक छोटा और स्पष्ट जवाब दो।`;
+
+        const result = await model.generateContent(prompt);
+        replyText = result.response.text();
+      } catch (aiError) {
+        console.error('Gemini API temporary error:', aiError.message);
+      }
 
       await axios.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
         chat_id: chatId,
