@@ -1,7 +1,7 @@
 {
-  "name": "telegram-gemini-bot",
+  "name": "telegram-tryon-bot",
   "version": "1.0.0",
-  "description": "Telegram bot using Gemini AI",
+  "description": "Telegram Virtual Try-On Bot for Shanti Niketan Saree Kendra",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -9,6 +9,7 @@
   "dependencies": {
     "express": "^4.19.2",
     "axios": "^1.7.2",
-    "@google/generative-ai": "^0.21.0"
+    "@google/genai": "^1.26.0",
+    "form-data": "^4.0.0"
   }
 }
